@@ -42,7 +42,7 @@ class NfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHa
 	}
 
 	init {
-		val nfcManager = activity.getSystemService(Context.NFC_SERVICE) as? NfcManager
+		val nfcManager = activity?.getSystemService(Context.NFC_SERVICE) as? NfcManager
 		nfcAdapter = nfcManager?.defaultAdapter
 	}
 
@@ -80,15 +80,15 @@ class NfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHa
 	override fun onTagDiscovered(tag: Tag?) {
 		val message = ndefToMap(tag)
 		Log.d(PLUGIN_TAG, "callback: onTagDiscovered $message")
-		activity.runOnUiThread {
+		activity?.runOnUiThread {
 			sendNfcListenerCallback(message)
 		}
 	}
 
 	private fun checkIfStartedWithNfc() {
 		Log.d(PLUGIN_TAG, "call: checkIfStartedWithNfc")
-		val intent = activity.intent
-		nfcMessageStartedWith = getNfcStartedWith(intent)
+		val intent = activity?.intent
+		nfcMessageStartedWith = getNfcStartedWith(intent!!)
 	}
 
 	private fun sendNfcListenerCallback(message: Map<String, Any?>) {
@@ -102,14 +102,14 @@ class NfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHa
 
 	private fun nfcReaderStart() {
 		Log.d(PLUGIN_TAG, "call: nfcReaderStart")
-		activity.runOnUiThread {
+		activity?.runOnUiThread {
 			nfcAdapter?.enableReaderMode(activity, this, READER_FLAGS, null)
 		}
 	}
 
 	private fun nfcReaderStop() {
 		Log.d(PLUGIN_TAG, "call: nfcReaderStop")
-		activity.runOnUiThread {
+		activity?.runOnUiThread {
 			nfcAdapter?.disableReaderMode(activity)
 		}
 	}
